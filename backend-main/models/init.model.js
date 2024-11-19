@@ -1,6 +1,5 @@
 const sequelize = require("../config/db.config"); // Kết nối Sequelize
-const TableInfo = require("./table_info.model"); // Import TableInfo model
-const IotData = require("./iot_data.model"); // Import IotData model
+// const IotData = require("./iot_data.model"); // Import IotData model
 
 const initModels = async () => {
   try {

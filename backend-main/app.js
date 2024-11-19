@@ -13,6 +13,7 @@ const { initModels } = require("./models/init.model.js");
 app.use(express.json()); // Parse các request có nội dung dạng JSON
 app.use(express.urlencoded({ extended: true })); // Parse các request có nội dung dạng URL-encoded
 
+// initModels()
 
 app.use("/auth", userRoutes);
 
