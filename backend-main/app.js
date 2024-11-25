@@ -2,9 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
+const mqtt = require("./controllers/mqttClient.controller.js");
 
 const userRoutes = require("./routes/user.routes"); // Import route user
-
 const iotDataRouter = require("./routes/iot_data.routes.js");
 
 const sequelize = require("./config/db.config.js");
@@ -16,11 +16,10 @@ app.use(express.urlencoded({ extended: true })); // Parse các request có nội
 // initModels()
 
 app.use("/auth", userRoutes);
-
 app.use("/api", iotDataRouter);
 
 // Kết nối database và chạy server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 sequelize
   .sync()
