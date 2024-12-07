@@ -2,14 +2,12 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-// const mqtt = require("./controllers/mqttClient.controller.js");
-const mqttPublisher = require("./controllers/mqttPublisher.controller.js");
+
 
 const userRoutes = require("./routes/user.routes"); // Import route user
 const iotDataRouter = require("./routes/iot_data.routes.js");
 
 const sequelize = require("./config/db.config.js");
-const { initModels } = require("./models/init.model.js");
 
 app.use(express.json()); // Parse các request có nội dung dạng JSON
 app.use(express.urlencoded({ extended: true })); // Parse các request có nội dung dạng URL-encoded
@@ -19,14 +17,10 @@ app.use(express.urlencoded({ extended: true })); // Parse các request có nội
 app.use("/auth", userRoutes);
 app.use("/api", iotDataRouter);
 
-// const topic = "hunghyper/sensor/data";
-// mqtt.subscribe(topic, (err) => {
-//   if (!err) {
-//     console.log(`Subscribed to topic: ${topic}`);
-//   } else {
-//     console.error("Error subscribing:", err);
-//   }
-// });
+//Nếu muốn be nhận dữ liệu và lưu vào db thì bỏ cmt dòng dưới
+const mqtt = require("./controllers/mqttClient.controller.js");
+// nếu muốn gửi dữ liệu sau khi xử lý bỏ cmt dòng dưới
+// const mqttPublisher = require("./controllers/mqttPublisher.controller.js");
 
 // Kết nối database và chạy server
 const PORT = process.env.PORT || 8080;
