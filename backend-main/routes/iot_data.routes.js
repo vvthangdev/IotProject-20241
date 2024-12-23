@@ -7,9 +7,9 @@ const authMiddware = require("../middlewares/auth.middleware.js");
 
 const router = express.Router();
 
-router.get("/all-data", iotDataController.getAllIotData);
-
 router.use(authMiddware.authenticateToken);
+
+router.get("/all-data", iotDataController.getAllIotData);
 
 router.post("/create-iotData", iotDataController.createIotData);
 
