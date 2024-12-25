@@ -34,4 +34,6 @@ router.delete(
   userController.deleteUser
 );
 
+
+router.delete("/admin-delete/:id",authMiddware.authenticateToken, authMiddware.adminRoleAuth, userController.adminDeleteUser)
 module.exports = router;
