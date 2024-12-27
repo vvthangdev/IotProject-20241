@@ -2,6 +2,7 @@ const express = require("express");
 // const userMiddleware = require("../middlewares/user.middleware.js");
 // const userUtil = require("../utils/user.util.js");
 const iotDataController = require("../controllers/iot_data.controller.js");
+const { suggestACTemperature } = require("../fuzzyModel/fuzzyController.js");
 
 const authMiddware = require("../middlewares/auth.middleware.js");
 
@@ -12,6 +13,8 @@ router.use(authMiddware.authenticateToken);
 router.get("/all-data", iotDataController.getAllIotData);
 
 router.post("/create-iotData", iotDataController.createIotData);
+
+router.get("/suggest-temperature", suggestACTemperature);
 
 router.use(authMiddware.adminRoleAuth);
 
