@@ -1,3 +1,5 @@
+const IotData = require("../models/iot_data.model")
+
 class FuzzyController {
   // Temperature: Cold (≤20°C), Comfortable (20-30°C), Hot (≥30°C)
   getTemperatureMembership(temp) {
