@@ -3,14 +3,17 @@ const express = require("express");
 // const userUtil = require("../utils/user.util.js");
 const iotDataController = require("../controllers/iot_data.controller.js");
 const { suggestACTemperature } = require("../fuzzyModel/fuzzyController.js");
+const mqttcontrol = require("../controllers/mqttctrl.controller.js")
 
 const authMiddware = require("../middlewares/auth.middleware.js");
 
 const router = express.Router();
 
-router.use(authMiddware.authenticateToken);
+// router.use(authMiddware.authenticateToken);
 
 router.get("/all-data", iotDataController.getAllIotData);
+
+router.post("/control", mqttcontrol.mqttControl)
 
 router.post("/create-iotData", iotDataController.createIotData);
 

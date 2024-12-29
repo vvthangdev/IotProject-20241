@@ -14,7 +14,6 @@ app.use(cors());
 app.use("/auth", userRoutes);
 app.use("/api", iotDataRouter);
 
-
 //Nếu muốn be nhận dữ liệu và lưu vào db thì bỏ cmt dòng dưới
 const mqtt = require("./controllers/mqttClient.controller.js");
 // nếu muốn gửi dữ liệu sau khi xử lý bỏ cmt dòng dưới
