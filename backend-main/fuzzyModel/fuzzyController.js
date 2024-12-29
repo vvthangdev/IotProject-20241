@@ -9,10 +9,10 @@ class FuzzyController {
       temp <= 20
         ? 0
         : temp >= 30
-        ? 0
-        : temp <= 25
-        ? (temp - 20) / 5
-        : (30 - temp) / 5;
+          ? 0
+          : temp <= 25
+            ? (temp - 20) / 5
+            : (30 - temp) / 5;
 
     const hot = temp <= 25 ? 0 : temp >= 30 ? 1 : (temp - 25) / 5;
 
@@ -27,10 +27,10 @@ class FuzzyController {
       humidity <= 30
         ? 0
         : humidity >= 70
-        ? 0
-        : humidity <= 50
-        ? (humidity - 30) / 20
-        : (70 - humidity) / 20;
+          ? 0
+          : humidity <= 50
+            ? (humidity - 30) / 20
+            : (70 - humidity) / 20;
 
     const humid =
       humidity <= 50 ? 0 : humidity >= 70 ? 1 : (humidity - 50) / 20;
@@ -103,7 +103,30 @@ async function suggestACTemperature(req, res) {
   }
 }
 
+async function suggest() {
+  try {
+    const latestData = await IotData.findOne({
+      order: [["timestamp", "DESC"]],
+    });
+
+    if (!latestData) {
+      return res.status(404).json({ error: "No IoT data available" });
+    }
+
+    const suggestedTemp = FuzzyAC.inferAcTemperature(
+      latestData.temperature,
+      latestData.humidity
+    );
+    console.log(suggestedTemp);
+    return suggestedTemp + latestData.temperature;
+  } catch (error) {
+    console.error("Error in AC temperature suggestion:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   FuzzyController,
   suggestACTemperature,
+  suggest,
 };

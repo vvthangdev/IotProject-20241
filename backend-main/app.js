@@ -10,14 +10,15 @@ const sequelize = require("./config/db.config.js");
 
 app.use(express.json()); // Parse các request có nội dung dạng JSON
 app.use(express.urlencoded({ extended: true })); // Parse các request có nội dung dạng URL-encoded
-
+app.use(cors());
 app.use("/auth", userRoutes);
 app.use("/api", iotDataRouter);
+
 
 //Nếu muốn be nhận dữ liệu và lưu vào db thì bỏ cmt dòng dưới
 const mqtt = require("./controllers/mqttClient.controller.js");
 // nếu muốn gửi dữ liệu sau khi xử lý bỏ cmt dòng dưới
-// const mqttPublisher = require("./controllers/mqttPublisher.controller.js");
+const mqttPublisher = require("./controllers/mqttPublisher.controller.js");
 
 // Kết nối database và chạy server
 const PORT = process.env.PORT || 8080;
@@ -32,3 +33,5 @@ sequelize
     });
   })
   .catch((err) => console.error("Unable to connect to the database:", err));
+
+

@@ -2,7 +2,10 @@
 const mqtt = require("mqtt"); // Thư viện MQTT
 const IotData = require("../models/iot_data.model"); // Import model để lưu dữ liệu vào cơ sở dữ liệu
 require("dotenv").config(); // Tải các biến môi trường từ tệp .env
+const express = require("express");
 
+const app = express();
+app.use(express.json());
 // Sử dụng biến môi trường để cấu hình
 const brokerUrl = process.env.BROKER_URL || "mqtt://broker.hivemq.com"; // URL của MQTT broker (sử dụng mặc định là HiveMQ nếu không cấu hình)
 const topic = process.env.MQTT_TOPIC || "iot/sensor-data"; // Tên topic cần subscribe (mặc định là "iot/sensor-data")
@@ -30,6 +33,44 @@ mqttClient.on("connect", () => {
       console.error("Lỗi khi subscribe vào topic:", err);
     }
   });
+});
+
+app.post("/api/control", async (req, res) => {
+  const { value } = req.body;
+
+  // Validate input
+  if (value !== 0 && value !== 1) {
+    return res.status(400).json({
+      success: false,
+      message: "Giá trị không hợp lệ. Chỉ chấp nhận 0 hoặc 1"
+    });
+  }
+
+  try {
+    // Publish to MQTT
+    mqttClient.publish(topic, JSON.stringify(value), { qos: 0 }, (err) => {
+      if (err) {
+        console.error("Lỗi khi gửi dữ liệu:", err);
+        return res.status(500).json({
+          success: false,
+          message: "Lỗi khi gửi dữ liệu đến MQTT broker"
+        });
+      }
+
+      console.log(`Đã gửi dữ liệu đến topic "${topic}":`, value);
+      res.json({
+        success: true,
+        message: "Đã gửi dữ liệu thành công",
+        data: { value, topic }
+      });
+    });
+  } catch (error) {
+    console.error("Lỗi:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server"
+    });
+  }
 });
 
 // Sự kiện khi nhận được tin nhắn từ broker
